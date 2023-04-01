@@ -2,9 +2,14 @@
 pipeline {
     agent { docker { image 'python:3.10.7-alpine' } }
     stages {
-        stage('build') {
+        stage('Sanity Check') {
             steps {
-                sh 'python --version'
+                input "Go for it?"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh "echo 'Deploy!'"
             }
         }
     }
