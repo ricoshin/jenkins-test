@@ -1,49 +1,16 @@
+/* Requires the Docker Pipeline plugin */
 pipeline {
-  agent none
-  stages {
-    stage('build') {
-      parallel {
-        stage('linux-armv6') {
-          agent {label 'linux-armv6'}
-          steps {
-            sh 'go install dpctl'
-          }
+    agent { docker { image 'python:3.10.7-alpine' } }
+    stages {
+        stage('Sanity Check') {
+            steps {
+                input "Go for it?"
+            }
         }
-        stage('darwin-amd64') {
-          agent {label 'darwin-amd64'}
-          steps {
-            sh 'go install dpctl'
-          }
+        stage('Deploy') {
+            steps {
+                sh "echo 'Deploy!'"
+            }
         }
-        stage('linux-amd64') {
-          agent {label 'linux-amd64'}
-          steps {
-            sh 'go install dpctl'
-          }
-        }
-      }
     }
-    stage('run') {
-      parallel {
-        stage('linux-armv6') {
-          agent {label 'linux-armv6'}
-          steps {
-            sh 'dpctl'
-          }
-        }
-        stage('darwin-amd64') {
-          agent {label 'darwin-amd64'}
-          steps {
-            sh 'dpctl'
-          }
-        }
-        stage('linux-amd64') {
-          agent {label 'linux-amd64'}
-          steps {
-            sh 'dpctl'
-          }
-        }
-      }
-    }
-  }
 }
